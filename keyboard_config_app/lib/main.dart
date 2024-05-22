@@ -54,13 +54,20 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class KeyboardDisplay extends StatelessWidget {
+class KeyboardDisplay extends StatefulWidget {
+  @override
+  _KeyboardDisplayState createState() => _KeyboardDisplayState();
+}
+
+class _KeyboardDisplayState extends State<KeyboardDisplay> {
+  bool _isKeySelected = false; // Tracks whether the key has been pressed
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(16.0),
-      width: 668, // Set width to match the width of the image
-      height: 488, // Set height to match the height of the image
+      width: 668, // Adjusted to the correct size of your keyboard layout
+      height: 488,
       child: Stack(
         children: [
           Image.asset('assets/keyboardv3.png',
@@ -70,17 +77,30 @@ class KeyboardDisplay extends StatelessWidget {
             return Text("Failed to load image!");
           }),
           Positioned(
-            left:
-                81, // Adjust this value to position the key over the keyboard image
-            top:
-                81, // Adjust this value to position the key over the keyboard image
+            left: 81, // Adjust to position over the desired key
+            top: 81,
             child: InkWell(
-              onTap: () => print("Key pressed"),
-              child: Image.asset(
-                'assets/key.png',
-                width: 66, // Key width
-                height: 66, // Key height
-                fit: BoxFit.fill,
+              onTap: () {
+                setState(() {
+                  _isKeySelected = !_isKeySelected; // Toggle the key selection
+                });
+              },
+              child: Stack(
+                children: [
+                  Image.asset(
+                    'assets/key.png',
+                    width: 66,
+                    height: 66,
+                    fit: BoxFit.fill,
+                  ),
+                  if (_isKeySelected) // Overlay image if the key is selected
+                    Positioned.fill(
+                      child: Image.asset(
+                        'assets/keyhi.png', // Assuming you have a "key_selected.png"
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
