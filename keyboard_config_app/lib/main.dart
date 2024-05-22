@@ -8,8 +8,8 @@ void main() {
     window_size.getWindowInfo().then((window) {
       if (window.screen != null) {
         final frame = window.screen!.visibleFrame;
-        final width = 800.0;
-        final height = 600.0;
+        final width = 960.0;
+        final height = 720.0;
         final left = ((frame.width - width) / 2).roundToDouble();
         final top = ((frame.height - height) / 3).roundToDouble();
         final newFrame = Rect.fromLTWH(left, top, width, height);
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Color.fromARGB(255, 20, 20, 30),
         body: ConstrainedBox(
-          constraints: BoxConstraints.tightFor(width: 800, height: 600),
+          constraints: BoxConstraints.tightFor(width: 960, height: 720),
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: Row(
@@ -44,9 +44,7 @@ class MyApp extends StatelessWidget {
                     ],
                   ),
                 ),
-                GenerateButton(
-                  offset: 50,
-                ),
+                GenerateButton(offset: 50),
               ],
             ),
           ),
@@ -60,15 +58,35 @@ class KeyboardDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Image.asset('assets/keyboardv3.png',
-                errorBuilder: (context, error, stackTrace) {
-              return Text("Failed to load image!");
-            })
-          ],
-        ));
+      padding: EdgeInsets.all(16.0),
+      width: 668, // Set width to match the width of the image
+      height: 488, // Set height to match the height of the image
+      child: Stack(
+        children: [
+          Image.asset('assets/keyboardv3.png',
+              width: 650,
+              height: 470,
+              fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) {
+            return Text("Failed to load image!");
+          }),
+          Positioned(
+            left:
+                81, // Adjust this value to position the key over the keyboard image
+            top:
+                81, // Adjust this value to position the key over the keyboard image
+            child: InkWell(
+              onTap: () => print("Key pressed"),
+              child: Image.asset(
+                'assets/key.png',
+                width: 66, // Key width
+                height: 66, // Key height
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -89,10 +107,9 @@ class _KeyDetailsState extends State<KeyDetails> {
               style: TextStyle(fontFamily: 'Dogica', color: Colors.white))
           : Column(
               children: [
-                Text(
-                  "$selectedKey Selected",
-                  style: TextStyle(fontFamily: 'Dogica', color: Colors.white),
-                ),
+                Text("$selectedKey Selected",
+                    style:
+                        TextStyle(fontFamily: 'Dogica', color: Colors.white)),
                 TextField(
                   decoration: InputDecoration(labelText: 'Macro'),
                   style: TextStyle(fontFamily: 'Dogica', color: Colors.white),
@@ -101,7 +118,6 @@ class _KeyDetailsState extends State<KeyDetails> {
                   decoration: InputDecoration(labelText: 'Name'),
                   style: TextStyle(fontFamily: 'Dogica', color: Colors.white),
                 ),
-                // Add more fields as needed
               ],
             ),
     );
@@ -115,14 +131,14 @@ class _KeyDetailsState extends State<KeyDetails> {
 }
 
 class GenerateButton extends StatelessWidget {
-  final double offset; // Add an offset parameter
+  final double offset;
 
   GenerateButton({this.offset = 0.0});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: offset), // Use the offset here
+      padding: EdgeInsets.only(top: offset),
       child: Container(
         width: 200,
         child: Column(
@@ -133,12 +149,10 @@ class GenerateButton extends StatelessWidget {
             }),
             TextButton(
               onPressed: () {
-                // Function to generate JSON
+                print('Generate JSON');
               },
               child: Text('Generate',
-                  style: TextStyle(
-                      fontFamily: 'Dogica',
-                      color: Colors.white)), // Apply the font here
+                  style: TextStyle(fontFamily: 'Dogica', color: Colors.white)),
             ),
           ],
         ),
